@@ -31,6 +31,7 @@ using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms.Platform.Android.AppCompat;
 using BottomBar.Droid.Renderers;
 using BottomBar.Droid.Utils;
+using Android.Content;
 
 [assembly: ExportRenderer (typeof (BottomBarPage), typeof (BottomBarPageRenderer))]
 
@@ -44,7 +45,7 @@ namespace BottomBar.Droid.Renderers
 		IPageController _pageController;
 	    IDictionary<Page, BottomBarBadge> _badges;
 
-		public BottomBarPageRenderer ()
+		public BottomBarPageRenderer (Context context) : base(context)
 		{
 			AutoPackage = false;
 		}
@@ -75,7 +76,7 @@ namespace BottomBar.Droid.Renderers
 					IVisualElementRenderer pageRenderer = Platform.GetRenderer (pageToRemove);
 
 					if (pageRenderer != null) {
-						pageRenderer.ViewGroup.RemoveFromParent ();
+						pageRenderer.View.RemoveFromParent ();
 						pageRenderer.Dispose ();
 					}
 
@@ -133,7 +134,7 @@ namespace BottomBar.Droid.Renderers
 					_pageController = PageController.Create (bottomBarPage);
 
 					// create a view which will act as container for Page's
-					_frameLayout = new FrameLayout (Forms.Context);
+					_frameLayout = new FrameLayout (Context);
 					_frameLayout.LayoutParameters = new FrameLayout.LayoutParams (LayoutParams.MatchParent, LayoutParams.MatchParent, GravityFlags.Fill);
 					AddView (_frameLayout, 0);
 
@@ -197,10 +198,11 @@ namespace BottomBar.Droid.Renderers
 			}
 
 			if (Platform.GetRenderer (view) == null) {
-				Platform.SetRenderer (view, Platform.CreateRenderer (view));
+                Platform.CreateRendererWithContext(view, Context);
+                Platform.SetRenderer (view, Platform.CreateRendererWithContext (view, Context));
 			}
 
-			_frameLayout.AddView (Platform.GetRenderer (view).ViewGroup);
+			_frameLayout.AddView (Platform.GetRenderer (view).View);
 		}
 
 		protected override void OnLayout (bool changed, int l, int t, int r, int b)
