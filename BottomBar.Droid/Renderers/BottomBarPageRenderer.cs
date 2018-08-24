@@ -45,7 +45,9 @@ namespace BottomBar.Droid.Renderers
 		IPageController _pageController;
 	    IDictionary<Page, BottomBarBadge> _badges;
 
-		public BottomBarPageRenderer (Context context) : base(context)
+        public BottomNavigationBar.BottomBar BottomBar => _bottomBar;
+
+        public BottomBarPageRenderer (Context context) : base(context)
 		{
 			AutoPackage = false;
 		}
@@ -251,8 +253,8 @@ namespace BottomBar.Droid.Renderers
 			if (_disposed || _bottomBar == null) {
 				return;
 			}
-
-			_bottomBar.SetBackgroundColor (Element.BarBackgroundColor.ToAndroid ());
+            _bottomBar.ItemContainer.SetBackgroundColor(Element.BarBackgroundColor.ToAndroid());
+            _bottomBar.SetBackgroundColor (Element.BarBackgroundColor.ToAndroid ());
 		}
 
 		void UpdateBarTextColor ()
