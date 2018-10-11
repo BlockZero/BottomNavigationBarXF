@@ -205,7 +205,8 @@ namespace BottomBar.Droid.Renderers
 			}
 
 			_frameLayout.AddView (Platform.GetRenderer (view).View);
-		}
+            UpdateSelectedTabIndex(Element.CurrentPage);
+        }
 
 		protected override void OnLayout (bool changed, int l, int t, int r, int b)
 		{
